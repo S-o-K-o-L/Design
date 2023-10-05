@@ -9,17 +9,8 @@ namespace Design
         private List<Task> tasks = new List<Task>();
         private int taskIdCounter = 1;
 
-        public void CreateTask(string title, string description, DateTime deadline, int userId)
+        public void AddTask(Task newTask)
         {
-            var newTask = new Task
-            {
-                Id = taskIdCounter++,
-                Title = title,
-                Description = description,
-                Deadline = deadline,
-                Status = "Open",
-                AssignedUserId = userId
-            };
             tasks.Add(newTask);
         }
 
@@ -37,7 +28,7 @@ namespace Design
             return tasks.FindAll(t => t.AssignedUserId == userId);
         }
 
-        public void ChangeTaskStatus(int taskId, string newStatus)
+        public void ChangeTaskStatus(int taskId, Status newStatus)
         {
             var task = tasks.Find(t => t.Id == taskId);
             if (task != null)
@@ -49,10 +40,10 @@ namespace Design
         public void CloseExpiredTasks()
         {
             var now = DateTime.Now;
-            var expiredTasks = tasks.Where(t => t.Status == "Open" && t.Deadline < now).ToList();
+            var expiredTasks = tasks.Where(t => t.Status == Status.OPEN && t.Deadline < now).ToList();
             foreach (var task in expiredTasks)
             {
-                task.Status = "Closed (Expired)";
+                task.Status = Status.CLOSE;
             }
         }
     }
